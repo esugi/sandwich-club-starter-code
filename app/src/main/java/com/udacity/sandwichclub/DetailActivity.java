@@ -12,14 +12,6 @@ import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
 import java.util.List;
-/*
-    TODO:
-    1. Check functionality
-    2. Make it pretty UI, List Display
-    3. Comment
-    4. Double check rubrics
-    5. Turn in
- */
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -68,19 +60,26 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
+    /***
+     * Private method to populate the UI with the correct sandwich information.
+     * @param s Sandwich object to populate UI with
+     */
     private void populateUI(Sandwich s) {
 
+        // Textviews to display information
         TextView tv_description = findViewById(R.id.description_tv);
         TextView tv_alsoKnownAs = findViewById(R.id.also_known_tv);
         TextView tv_ingredients = findViewById(R.id.ingredients_tv);
         TextView tv_origin = findViewById(R.id.origin_tv);
 
+        // Description Display, Paragraph form.
         if(s.getDescription().isEmpty()) {
             tv_description.setText(DEFAULT_TEXT);
         } else {
             tv_description.setText(s.getDescription());
         }
 
+        // Also Known As Display, List separated by commas
         if(s.getAlsoKnownAs().isEmpty()) {
             tv_alsoKnownAs.setText(DEFAULT_TEXT);
         } else {
@@ -88,13 +87,14 @@ public class DetailActivity extends AppCompatActivity {
             tv_alsoKnownAs.setText(aka.substring(1,aka.length()-1));
         }
 
+        // Ingredients Display, Bullet Point List
         if(s.getIngredients().isEmpty()) {
             tv_ingredients.setText(DEFAULT_TEXT);
         } else {
-            String ingredients = s.getIngredients().toString();
-            tv_ingredients.setText(formatListMultiLines(ingredients));
+            tv_ingredients.setText(formatListMultiLines(s.getIngredients()));
         }
 
+        // Origin Display
         if(s.getPlaceOfOrigin().isEmpty()) {
             tv_origin.setText(DEFAULT_TEXT);
         } else {
@@ -102,10 +102,17 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private String formatListMultiLines(String stringList)
+    /***
+     * Private helper method to format a bullet point list
+     * @param stringList sandwich ingredients in a list of strings
+     * @return String sandwich ingredient bullet point list
+     */
+    private String formatListMultiLines(List<String> stringList)
     {
-        stringList = stringList.substring(1, stringList.length()-1);
-        //return stringList.replaceAll(", ", "\n");
-        return stringList;
+        String ingredientList = "";
+        for (int i = 0; i < stringList.size(); i++) {
+            ingredientList += "\u2022 " + stringList.get(i) + "\n";
+        }
+        return ingredientList.substring(0, ingredientList.length()-1);
     }
 }
